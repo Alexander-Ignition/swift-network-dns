@@ -11,7 +11,7 @@ public enum SerializationError: Error {
     case outOfBounds(index: Int, maximum: Int)
 }
 
-struct UnsafeBuffer { // CompressionBuffer
+struct UnsafeBuffer {
     typealias Buffer = UnsafeMutableRawBufferPointer
     typealias Index = Buffer.Index
 
@@ -36,7 +36,7 @@ struct UnsafeBuffer { // CompressionBuffer
     }
 
     func require(length: Int) throws {
-        if length >= count  {
+        if length > count  {
             throw SerializationError.outOfBounds(index: startIndex + length, maximum: endIndex)
         }
     }
@@ -63,7 +63,7 @@ struct UnsafeBuffer { // CompressionBuffer
         _ integerType: T.Type = T.self
     ) throws -> T {
         let size = MemoryLayout<T>.size
-        //try require(length: size)
+        try require(length: size)
         let value = base.loadUnaligned(fromByteOffset: startIndex, as: integerType)
         startIndex += size
         return value.bigEndian
