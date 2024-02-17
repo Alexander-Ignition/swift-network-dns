@@ -15,10 +15,18 @@ final class DNSQueryTests: XCTestCase {
         XCTAssertEqual(query.questions, [])
     }
 
+    func testQuestion() {
+        let query = DNSQuery.question(domain: "example.com", type: .a)
+
+        XCTAssertTrue(query.header.isRecursionDesired)
+        XCTAssertEqual(query.questions, [
+            DNSQuestion(domain: "example.com", qType: .a, qClass: .in)
+        ])
+    }
+
     func testDataRepresentation() {
         var query = DNSQuery.question(domain: "example.com", type: .a)
         query.header.id = 15
-        query.header.parameters = 0x0100
 
         let expected = Data([
             0x00, 0x0F, // - ID
