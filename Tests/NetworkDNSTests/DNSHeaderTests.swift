@@ -143,7 +143,6 @@ final class DNSHeaderTests: XCTestCase {
     func testWriteToBuffer() {
         var header = DNSHeader(id: 0xAA_AA)
         header.questionCount = 1
-        header.isRecursionDesired = true
 
         var data = Data(count: DNSHeader.length)
         data.withUnsafeMutableBytes { ptr in
